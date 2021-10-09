@@ -6,8 +6,7 @@ import { interval } from "./config";
 import { polyDAI, polyMatic } from "./constrants/addresses";
 
 export const main = async () => {
-  let basePrice = 0.2;
-  // let basePrice = await get1inchPrice(polyMatic, polyDAI);
+  let basePrice = await get1inchPrice(polyMatic, polyDAI);
 
   setInterval(async () => {
     const inchprice = await get1inchPrice(polyMatic, polyDAI);
