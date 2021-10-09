@@ -3,33 +3,32 @@ dotEnvConfig();
 import { ethers } from "ethers";
 import axios from "axios";
 import { polygonChainID } from "./constrants/chainId";
-import { polyDAI, polyMatic } from "./constrants/addresses";
 import { IPriveChangeInfo } from "./interfaces/main";
 import { minDiff } from "./config";
 
-const fromTokenAddress = polyMatic;
-const toTokenAddress = polyDAI;
-const amount = ethers.utils.parseUnits("1.0", 18).toString();
-
-// sell 1.0 matic
-let callURL =
-  "https://api.1inch.exchange/v3.0/" +
-  polygonChainID +
-  "/quote?" +
-  "fromTokenAddress=" +
-  fromTokenAddress +
-  "&toTokenAddress=" +
-  toTokenAddress +
-  "&amount=" +
-  amount;
-
 /**
- * Will call the api and return the data needed
- * @param {the url of what api call you want} url
- * @returns swap transaction
+ * Will call the api and return the current price
+ * @param fromTokenAddress token address you're swapping from
+ * @param toTokenAddress token address you're swapping to
+ * @param amount amount of token you're swappping from
+ * @returns the current token price
  */
-export async function get1inchPrice() {
-  // export async function get1inchPrice(url: string) {
+export async function get1inchPrice(
+  fromTokenAddress: string,
+  toTokenAddress: string,
+  amount: string = ethers.utils.parseUnits("1.0", 18).toString()
+): Promise<number> {
+  // sell 1.0 matic
+  let callURL =
+    "https://api.1inch.exchange/v3.0/" +
+    polygonChainID +
+    "/quote?" +
+    "fromTokenAddress=" +
+    fromTokenAddress +
+    "&toTokenAddress=" +
+    toTokenAddress +
+    "&amount=" +
+    amount;
   let temp: any = await axios
     .get(callURL)
     .then((result) => {
