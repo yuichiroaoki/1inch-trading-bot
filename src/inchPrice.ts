@@ -2,9 +2,9 @@ import { config as dotEnvConfig } from "dotenv";
 dotEnvConfig();
 import { ethers } from "ethers";
 import axios from "axios";
-import { polygonChainID } from "./constrants/chainId";
 import { IPriveChangeInfo, Status } from "./interfaces/main";
 import { threshold } from "./config";
+import { chainId } from "./utils/config";
 
 /**
  * Will call the api and return the current price
@@ -21,7 +21,7 @@ export async function get1inchPrice(
   // sell 1.0 matic
   let callURL =
     "https://api.1inch.exchange/v3.0/" +
-    polygonChainID +
+    chainId +
     "/quote?" +
     "fromTokenAddress=" +
     fromTokenAddress +

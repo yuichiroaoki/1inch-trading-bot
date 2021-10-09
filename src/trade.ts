@@ -1,9 +1,9 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import { polyDAI, polyMatic } from "./constrants/addresses";
-import { polygonChainID } from "./constrants/chainId";
 import * as erc20Abi from "./abis/erc20.json";
 import { baseTradingAmount } from "./config";
+import { chainId } from "./utils/config";
 
 const maticProvider = new ethers.providers.JsonRpcProvider(
   process.env.ALCHEMY_POLYGON_RPC_URL
@@ -43,7 +43,7 @@ export async function executeTrade(status: number) {
 
   const callURL =
     "https://api.1inch.exchange/v3.0/" +
-    polygonChainID +
+    chainId +
     "/swap?" +
     "fromTokenAddress=" +
     fromTokenAddress +
@@ -101,7 +101,7 @@ export async function executeTrade(status: number) {
 async function approveApiCaller(value: any, tokenAddress: string, _nonce: any) {
   let url =
     "https://api.1inch.exchange/v3.0/" +
-    polygonChainID +
+    chainId +
     "/approve/calldata" +
     (value > -1 && value != null ? "?amount=" + value + "&" : "") + //tack on the value if it's greater than -1
     "tokenAddress=" +
