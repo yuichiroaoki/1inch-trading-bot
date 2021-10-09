@@ -5,7 +5,6 @@ import { executeTrade } from "./trade";
 import { interval } from "./config";
 
 export const main = async () => {
-
   let basePrice = await get1inchPrice();
 
   setInterval(async () => {
