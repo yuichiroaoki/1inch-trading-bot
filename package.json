@@ -21,6 +21,8 @@
     "prettier": "2.4.1"
   },
   "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
