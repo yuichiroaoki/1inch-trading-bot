@@ -103,8 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-lib
-
 # yarn2
 .pnp.*
 .yarn/*
