@@ -6,7 +6,8 @@ import { interval } from "./config";
 import { polyDAI, polyMatic } from "./constrants/addresses";
 
 export const main = async () => {
-  let basePrice = await get1inchPrice(polyMatic, polyDAI);
+  let basePrice = 0.2;
+  // let basePrice = await get1inchPrice(polyMatic, polyDAI);
 
   setInterval(async () => {
     const inchprice = await get1inchPrice(polyMatic, polyDAI);
@@ -14,7 +15,7 @@ export const main = async () => {
     console.log(status);
     basePrice = status.base;
     if (status.status !== 0) {
-      executeTrade(status.status);
+      executeTrade(polyDAI, polyMatic, status);
     }
   }, interval);
 };

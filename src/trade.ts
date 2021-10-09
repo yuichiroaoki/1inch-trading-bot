@@ -4,6 +4,7 @@ import { polyDAI, polyMatic } from "./constrants/addresses";
 import * as erc20Abi from "./abis/erc20.json";
 import { baseTradingAmount } from "./config";
 import { chainId } from "./utils/config";
+import { IPriveChangeInfo } from "./interfaces/main";
 
 const maticProvider = new ethers.providers.JsonRpcProvider(
   process.env.ALCHEMY_POLYGON_RPC_URL
@@ -11,32 +12,40 @@ const maticProvider = new ethers.providers.JsonRpcProvider(
 const private_key = process.env.PRIVATE_KEY || "key";
 const slippage = 1;
 const wallet = new ethers.Wallet(private_key, maticProvider);
-const DAI = new ethers.Contract(polyDAI, erc20Abi, maticProvider);
+const ERC20 = new ethers.Contract(polyDAI, erc20Abi, maticProvider);
 
-export async function executeTrade(status: number) {
+export async function executeTrade(
+  fromTokenAddress: string,
+  toTokenAddress: string,
+  status: IPriveChangeInfo
+) {
   let nonce = 0;
   let globalData: any;
 
-  let fromTokenAddress = polyDAI;
-  let toTokenAddress = polyMatic;
   let amount = ethers.utils.parseUnits("1.0", 18).toString();
 
-  if (status === 1) {
+  if (status.status === 1) {
     //   going to buy matic
-    const daiBalance = await DAI.balanceOf(wallet.address);
+    const daiBalance = await ERC20.balanceOf(wallet.address);
     const hasEnoughAmount = daiBalance.gt(baseTradingAmount);
     if (!hasEnoughAmount) return;
     amount = baseTradingAmount.toString();
     fromTokenAddress = polyDAI;
     toTokenAddress = polyMatic;
   } else {
-    //   going to sell matic
+    //   going to sell matic (save 0.5 matic for future transactions)
     const maticBalance = (await maticProvider.getBalance(wallet.address)).sub(
       ethers.utils.parseEther("0.5")
     );
-    const hasEnoughAmount = maticBalance.gt(baseTradingAmount);
+    const base = parseFloat(ethers.utils.formatUnits(baseTradingAmount, 18));
+    const tradingMaticAmount = ethers.utils.parseUnits(
+      (base / status.base).toString(),
+      18
+    );
+
+    const hasEnoughAmount = maticBalance.gt(tradingMaticAmount);
     if (!hasEnoughAmount) return;
-    amount = baseTradingAmount.toString();
+    amount = tradingMaticAmount.toString();
     fromTokenAddress = polyMatic;
     toTokenAddress = polyDAI;
   }
