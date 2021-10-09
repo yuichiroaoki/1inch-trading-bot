@@ -1,4 +1,4 @@
-enum Status {
+export enum Status {
   Stay = 0,
   Buy,
   Sell,

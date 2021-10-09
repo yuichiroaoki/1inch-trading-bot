@@ -3,8 +3,8 @@ dotEnvConfig();
 import { ethers } from "ethers";
 import axios from "axios";
 import { polygonChainID } from "./constrants/chainId";
-import { IPriveChangeInfo } from "./interfaces/main";
-import { minDiff } from "./config";
+import { IPriveChangeInfo, Status } from "./interfaces/main";
+import { threshold } from "./config";
 
 /**
  * Will call the api and return the current price
@@ -47,31 +47,37 @@ export async function get1inchPrice(
   return parseFloat(rate);
 }
 
+/**
+ *
+ * @param basePrice base price
+ * @param currentPrice current price
+ * @returns status
+ */
 export function checkPriceMove(
   basePrice: number,
   currentPrice: number
 ): IPriveChangeInfo {
   const priceChange = (basePrice - currentPrice) / basePrice;
   if (
-    basePrice * (1 - minDiff) < currentPrice &&
-    currentPrice < basePrice * (1 + minDiff)
+    basePrice * (1 - threshold) < currentPrice &&
+    currentPrice < basePrice * (1 + threshold)
   ) {
     return {
       base: basePrice,
       change: priceChange,
-      status: 0,
+      status: Status.Stay,
     };
-  } else if (basePrice * (1 - minDiff) >= currentPrice) {
+  } else if (basePrice * (1 - threshold) >= currentPrice) {
     return {
       base: currentPrice,
       change: priceChange,
-      status: 1,
+      status: Status.Buy,
     };
   } else {
     return {
       base: currentPrice,
       change: priceChange,
-      status: 2,
+      status: Status.Sell,
     };
   }
 }
