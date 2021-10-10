@@ -2,8 +2,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { polyDAI, polyMatic } from "./constrants/addresses";
 import * as erc20Abi from "./abis/erc20.json";
-import { baseTradingAmount } from "./config";
-import { chainId, explorerURL, provider } from "./utils/config";
+import { baseTradingAmount, chainId, explorerURL, provider } from "./config";
 import { IPriveChangeInfo } from "./interfaces/main";
 
 const private_key = process.env.PRIVATE_KEY;

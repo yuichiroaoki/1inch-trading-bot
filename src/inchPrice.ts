@@ -3,8 +3,7 @@ dotEnvConfig();
 import { ethers } from "ethers";
 import axios from "axios";
 import { IPriveChangeInfo, Status } from "./interfaces/main";
-import { threshold } from "./config";
-import { chainId } from "./utils/config";
+import { chainId, threshold } from "./config";
 
 /**
  * Will call the api and return the current price
