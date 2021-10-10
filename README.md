@@ -36,10 +36,11 @@ Run the following command.
 
 ```console
 yarn install
-
 ```
 
-### 3. Set Config
+### 3. Set Config (Optional)
+
+Change the config in src/config.ts if you want.
 
 ### 4. Run Bot
 

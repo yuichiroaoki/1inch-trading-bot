@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { polyDAI, polyMatic } from "./constrants/addresses";
 import { polygonChainID } from "./constrants/chainId";
 
 //  fixed thresholds for buying and selling
@@ -17,3 +18,7 @@ export const provider = new ethers.providers.JsonRpcProvider(
 );
 
 export const explorerURL = "https://polygonscan.com";
+
+// Token pair the bot trading
+export const baseToken = polyMatic;
+export const quoteToken = polyDAI;
