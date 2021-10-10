@@ -4,9 +4,10 @@ import { polygonChainID } from "./constrants/chainId";
 //  fixed thresholds for buying and selling
 export const threshold = 0.03;
 
-// every min
+// interval of price check (ms)
 export const interval = 60 * 1000;
 
+// amount of DAI token trading per a single buy/sell action
 export const baseTradingAmount = ethers.utils.parseUnits("3.0", 18);
 
 export const chainId = polygonChainID;

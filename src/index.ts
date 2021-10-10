@@ -6,6 +6,7 @@ import { interval } from "./config";
 import { polyDAI, polyMatic } from "./constrants/addresses";
 
 export const main = async () => {
+  // set initial base price to the current price
   let basePrice = await get1inchPrice(polyMatic, polyDAI);
 
   setInterval(async () => {

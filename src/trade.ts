@@ -15,6 +15,13 @@ const slippage = 1;
 const wallet = new ethers.Wallet(private_key, provider);
 const ERC20 = new ethers.Contract(polyDAI, erc20Abi, provider);
 
+/**
+ * execute trade based on Status
+ * @param fromTokenAddress token address you're swapping from
+ * @param toTokenAddress token address you're swapping to
+ * @param status current bot status
+ * @returns
+ */
 export async function executeTrade(
   fromTokenAddress: string,
   toTokenAddress: string,
