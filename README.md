@@ -1,4 +1,10 @@
 # Simple 1inch Trading Bot
+## Trading Strategy
+![image](https://user-images.githubusercontent.com/45054071/136684673-0bda3848-459a-47a3-8bff-92e65f1c3144.png)
+
+This bot trades based on the price change from the last buy/sell action. First, it sets the base price to the current, and update it when the bot executes trade. Here is an example of how this would trade when trading Matic and DAI. It sets the threshold as 3%.
+
+![image](https://user-images.githubusercontent.com/45054071/136684280-3c249357-cfd3-402d-b92c-3d61c2ba378d.png)
 
 ## Installation and Setup
 
