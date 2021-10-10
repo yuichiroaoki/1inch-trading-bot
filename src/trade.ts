@@ -3,16 +3,18 @@ import { ethers } from "ethers";
 import { polyDAI, polyMatic } from "./constrants/addresses";
 import * as erc20Abi from "./abis/erc20.json";
 import { baseTradingAmount } from "./config";
-import { chainId } from "./utils/config";
+import { chainId, explorerURL, provider } from "./utils/config";
 import { IPriveChangeInfo } from "./interfaces/main";
 
-const maticProvider = new ethers.providers.JsonRpcProvider(
-  process.env.ALCHEMY_POLYGON_RPC_URL
-);
-const private_key = process.env.PRIVATE_KEY || "key";
+const private_key = process.env.PRIVATE_KEY;
+
+if (!private_key) {
+  throw new Error("Please set your private key in a .env file");
+}
+
 const slippage = 1;
-const wallet = new ethers.Wallet(private_key, maticProvider);
-const ERC20 = new ethers.Contract(polyDAI, erc20Abi, maticProvider);
+const wallet = new ethers.Wallet(private_key, provider);
+const ERC20 = new ethers.Contract(polyDAI, erc20Abi, provider);
 
 export async function executeTrade(
   fromTokenAddress: string,
@@ -26,15 +28,15 @@ export async function executeTrade(
 
   if (status.status === 1) {
     //   going to buy matic
-    const daiBalance = await ERC20.balanceOf(wallet.address);
-    const hasEnoughAmount = daiBalance.gt(baseTradingAmount);
+    const erc20Balance = await ERC20.balanceOf(wallet.address);
+    const hasEnoughAmount = erc20Balance.gt(baseTradingAmount);
     if (!hasEnoughAmount) return;
     amount = baseTradingAmount.toString();
     fromTokenAddress = polyDAI;
     toTokenAddress = polyMatic;
   } else {
     //   going to sell matic (save 0.5 matic for future transactions)
-    const maticBalance = (await maticProvider.getBalance(wallet.address)).sub(
+    const maticBalance = (await provider.getBalance(wallet.address)).sub(
       ethers.utils.parseEther("0.5")
     );
     const base = parseFloat(ethers.utils.formatUnits(baseTradingAmount, 18));
@@ -76,8 +78,8 @@ export async function executeTrade(
     globalData = await approveApiCaller(amount, polyDAI, nonce);
     try {
       await wallet.sendTransaction(globalData).then((data) => {
-        const explorerURL = `https://polygonscan.com/tx/` + data.hash;
-        console.log("congrats! your transaction is here", explorerURL);
+        const txURL = `${explorerURL}/tx/${data.hash}`;
+        console.log("congrats! your transaction is here", txURL);
       });
       console.log("Approval success");
     } catch (e) {
@@ -91,8 +93,8 @@ export async function executeTrade(
 
   try {
     await wallet.sendTransaction(globalData).then((data) => {
-      const explorerURL = `https://polygonscan.com/tx/` + data.hash;
-      console.log("congrats! your transaction is here", explorerURL);
+      const txURL = `${explorerURL}/tx/${data.hash}`;
+      console.log("congrats! your transaction is here", txURL);
     }); //send the transaction
     console.log("Transaction success");
   } catch (e) {
